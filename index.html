@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- The invitation token sits in the URL fragment: never sent to the host, never leaked as referrer. -->
   <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Cache-Control" content="no-cache">
   <meta name="robots" content="noindex, nofollow">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
   <title>Rejoindre la famille</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
   <main>
@@ -37,7 +38,7 @@
       <p class="muted">Ouvrez l'e-mail d'invitation et touchez de nouveau le bouton « Rejoindre la famille ».</p>
     </section>
   </main>
-  <script src="qrcode.js"></script>
-  <script src="app.js"></script>
+  <script src="qrcode.js?v=2"></script>
+  <script src="app.js?v=2"></script>
 </body>
 </html>
