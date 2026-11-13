@@ -29,7 +29,10 @@
     var scheme = m[1];
     var rest = m[2];
     var pkg = scheme === 'exp' ? 'host.exp.exponent' : 'fr.partageheritage.app';
-    return 'intent://' + rest + '#Intent;scheme=' + scheme + ';package=' + pkg + ';end';
+    // If the app is missing, come back to this page (instead of the Play Store) and say so.
+    var back = location.href.split('#')[0] + '#' + location.hash.slice(1).replace(/&?notopened=1/, '') + '&notopened=1';
+    return 'intent://' + rest + '#Intent;scheme=' + scheme + ';package=' + pkg
+      + ';S.browser_fallback_url=' + encodeURIComponent(back) + ';end';
   }
 
   if (isPhone) {
@@ -38,7 +41,9 @@
     link.href = isAndroid ? androidIntent(target) : target;
     // Small technical line, to help diagnose during testing (no secret: the token is not shown).
     document.getElementById('target').textContent =
-      (app.indexOf('exp://') === 0 ? 'Version de test (Expo Go) : ' + app.replace(/\/--\/invitation$/, '') : 'Application installée')
+      (app.indexOf('exp://') === 0
+        ? 'Version de test (Expo Go) : ' + app.replace(/\/--\/invitation$/, '')
+        : 'Application installée (pas de lien de test dans l’e-mail)')
       + (isAndroid ? ' · Android' : '');
     link.addEventListener('click', function () {
       // If the page is still in front after a moment, the app probably is not installed.
@@ -47,6 +52,7 @@
       }, 2500);
     });
     show('phone');
+    if (params.get('notopened') === '1') show('not-opened');
   } else {
     var qr = qrcode(0, 'M');
     qr.addData(location.href);
