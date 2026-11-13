@@ -19,11 +19,27 @@
   }
 
   var ua = navigator.userAgent;
-  var isPhone = /Android|iPhone|iPad|iPod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  var isAndroid = /Android/i.test(ua);
+  var isPhone = isAndroid || /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+
+  // Chrome on Android does not reliably hand a plain custom-scheme link (exp://, partageheritage://)
+  // to an app: use an intent:// URL naming the scheme and the app package instead.
+  function androidIntent(target) {
+    var m = target.match(/^([a-z]+):\/\/\/?(.*)$/);
+    var scheme = m[1];
+    var rest = m[2];
+    var pkg = scheme === 'exp' ? 'host.exp.exponent' : 'fr.partageheritage.app';
+    return 'intent://' + rest + '#Intent;scheme=' + scheme + ';package=' + pkg + ';end';
+  }
 
   if (isPhone) {
     var link = document.getElementById('open-app');
-    link.href = app + '?t=' + token;
+    var target = app + '?t=' + token;
+    link.href = isAndroid ? androidIntent(target) : target;
+    // Small technical line, to help diagnose during testing (no secret: the token is not shown).
+    document.getElementById('target').textContent =
+      (app.indexOf('exp://') === 0 ? 'Version de test (Expo Go) : ' + app.replace(/\/--\/invitation$/, '') : 'Application installée')
+      + (isAndroid ? ' · Android' : '');
     link.addEventListener('click', function () {
       // If the page is still in front after a moment, the app probably is not installed.
       setTimeout(function () {

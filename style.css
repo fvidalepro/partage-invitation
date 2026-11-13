@@ -37,3 +37,4 @@ p { margin: 0 0 16px; }
 .note { background: var(--warn-soft); color: var(--warn-text); padding: 12px 14px; border-radius: 12px; font-size: 15px; }
 #qr { width: 240px; max-width: 100%; margin: 24px auto; padding: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; }
 #qr svg { display: block; width: 100%; height: auto; }
+.tech { color: var(--muted); font-size: 12px; margin-top: -8px; }
